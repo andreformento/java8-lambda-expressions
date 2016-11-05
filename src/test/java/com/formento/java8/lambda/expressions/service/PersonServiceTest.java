@@ -47,8 +47,7 @@ public class PersonServiceTest {
     @Test
     public void shouldShowPersonsOlderThan() {
         // given
-        final int low = 20;
-        final int high = 30;
+        final CheckPersonEligibleForSelectiveService check = new CheckPersonEligibleForSelectiveService();
 
         final Person spyFred = spy(fred);
         final Person spyJane = spy(jane);
@@ -64,7 +63,7 @@ public class PersonServiceTest {
                 .build();
 
         // when
-        personService.printPersonsWithinAgeRange(roster, low, high);
+        personService.printPersons(roster, check);
 
         // then
         verify(spyFred, times(1)).printPerson();
