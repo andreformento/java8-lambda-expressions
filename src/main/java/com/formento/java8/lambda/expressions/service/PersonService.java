@@ -2,16 +2,19 @@ package com.formento.java8.lambda.expressions.service;
 
 import com.formento.java8.lambda.expressions.model.Person;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PersonService {
 
-    public void printPersonsOlderThan(List<Person> roster, Integer age) {
+    public List<Person> filterPersonsOlderThan(List<Person> roster, Integer age) {
+        List<Person> result = new ArrayList<>();
         for (Person p : roster) {
             if (p.getAge() >= age) {
-                p.printPerson();
+                result.add(p);
             }
         }
+        return result;
     }
 
 }

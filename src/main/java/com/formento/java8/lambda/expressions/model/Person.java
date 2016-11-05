@@ -2,8 +2,6 @@ package com.formento.java8.lambda.expressions.model;
 
 import java.time.LocalDate;
 import java.time.chrono.IsoChronology;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Person {
 
@@ -23,14 +21,18 @@ public class Person {
         this.emailAddress = emailAddress;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return birthday
                 .until(IsoChronology.INSTANCE.dateNow())
                 .getYears();
     }
 
-    public void printPerson() {
-        System.out.println(name + ", " + this.getAge());
+    public String toString() {
+        return new StringBuilder()
+                .append(this.name)
+                .append(", ")
+                .append(this.getAge())
+                .toString();
     }
 
     public Sex getGender() {
@@ -49,35 +51,26 @@ public class Person {
         return birthday;
     }
 
-    public static int compareByAge(Person a, Person b) {
-        return a.birthday.compareTo(b.birthday);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Person person = (Person) o;
+
+        if (name != null ? !name.equals(person.name) : person.name != null) return false;
+        if (birthday != null ? !birthday.equals(person.birthday) : person.birthday != null) return false;
+        if (gender != person.gender) return false;
+        return emailAddress != null ? emailAddress.equals(person.emailAddress) : person.emailAddress == null;
+
     }
 
-    public static List<Person> createRoster() {
-        List<Person> roster = new ArrayList<>();
-        roster.add(
-                new Person(
-                        "Fred",
-                        IsoChronology.INSTANCE.date(1980, 6, 20),
-                        Person.Sex.MALE,
-                        "fred@example.com"));
-        roster.add(
-                new Person(
-                        "Jane",
-                        IsoChronology.INSTANCE.date(1990, 7, 15),
-                        Person.Sex.FEMALE, "jane@example.com"));
-        roster.add(
-                new Person(
-                        "George",
-                        IsoChronology.INSTANCE.date(1991, 8, 13),
-                        Person.Sex.MALE, "george@example.com"));
-        roster.add(
-                new Person(
-                        "Bob",
-                        IsoChronology.INSTANCE.date(2000, 9, 12),
-                        Person.Sex.MALE, "bob@example.com"));
-
-        return roster;
+    @Override
+    public int hashCode() {
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
+        result = 31 * result + (gender != null ? gender.hashCode() : 0);
+        result = 31 * result + (emailAddress != null ? emailAddress.hashCode() : 0);
+        return result;
     }
-
 }
