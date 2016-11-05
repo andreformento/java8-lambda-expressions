@@ -7,7 +7,7 @@ Based on [The Java™ Tutorials: Lambda Expressions](https://docs.oracle.com/jav
 One simplistic approach is to create several methods; each method searches for members that match one characteristic, such as gender or age. The following method prints members that are older than a specified age:
 
 ```
-public static void printPersonsOlderThan(List<Person> roster, int age) {
+public void printPersonsOlderThan(List<Person> roster, int age) {
     for (Person p : roster) {
         if (p.getAge() >= age) {
             p.printPerson();
