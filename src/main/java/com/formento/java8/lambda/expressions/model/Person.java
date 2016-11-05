@@ -35,6 +35,10 @@ public class Person {
                 .toString();
     }
 
+    public void printPerson() {
+        System.out.println(this.toString());
+    }
+
     public Sex getGender() {
         return gender;
     }

@@ -8,15 +8,16 @@ import org.junit.Test;
 import java.time.chrono.IsoChronology;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class PersonServiceTest {
 
     private PersonService personService;
-    private List<Person> roster;
 
     private Person fred;
     private Person jane;
+    private Person george;
+    private Person bob;
 
     @Before
     public void init() {
@@ -33,19 +34,14 @@ public class PersonServiceTest {
                 IsoChronology.INSTANCE.date(currentYear - 25, 7, 15),
                 Person.Sex.FEMALE, "jane@example.com");
 
-        this.roster = ImmutableList
-                .<Person>builder()
-                .add(fred)
-                .add(jane)
-                .add(new Person(
-                        "George",
-                        IsoChronology.INSTANCE.date(currentYear - 17, 8, 13),
-                        Person.Sex.MALE, "george@example.com"))
-                .add(new Person(
-                        "Bob",
-                        IsoChronology.INSTANCE.date(currentYear - 13, 9, 12),
-                        Person.Sex.MALE, "bob@example.com"))
-                .build();
+        george = new Person(
+                "George",
+                IsoChronology.INSTANCE.date(currentYear - 17, 8, 13),
+                Person.Sex.MALE, "george@example.com");
+        bob = new Person(
+                "Bob",
+                IsoChronology.INSTANCE.date(currentYear - 13, 9, 12),
+                Person.Sex.MALE, "bob@example.com");
     }
 
     @Test
@@ -53,14 +49,28 @@ public class PersonServiceTest {
         // given
         final Integer age = 18;
 
+        final Person spyFred = spy(fred);
+        final Person spyJane = spy(jane);
+        final Person spyGeorge = spy(george);
+        final Person spyBob = spy(bob);
+
+        final List<Person> roster = ImmutableList
+                .<Person>builder()
+                .add(spyFred)
+                .add(spyJane)
+                .add(spyGeorge)
+                .add(spyBob)
+                .build();
+
         // when
-        final List<Person> personsOlderThan18 = personService.filterPersonsOlderThan(roster, age);
+        personService.printPersonsOlderThan(roster, age);
 
         // then
-        assertNotNull(personsOlderThan18);
-        assertEquals(2, personsOlderThan18.size());
-        assertTrue(personsOlderThan18.contains(fred));
-        assertTrue(personsOlderThan18.contains(jane));
+        verify(spyFred, times(1)).printPerson();
+        verify(spyJane, times(1)).printPerson();
+
+        verify(spyGeorge, never()).printPerson();
+        verify(spyBob, never()).printPerson();
     }
 
 }
