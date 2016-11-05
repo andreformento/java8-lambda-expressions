@@ -1,6 +1,8 @@
 # Java 8: Lambda expressions
 
-##### Based on [The Java™ Tutorials: Lambda Expressions](https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html#approach1)
+Based on [The Java™ Tutorials: Lambda Expressions](https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html#approach1)
+
+#### Approach 1: Create Methods That Search for Members That Match One Characteristic
 
 One simplistic approach is to create several methods; each method searches for members that match one characteristic, such as gender or age. The following method prints members that are older than a specified age:
 
