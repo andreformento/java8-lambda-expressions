@@ -6,9 +6,9 @@ import java.util.List;
 
 public class PersonService {
 
-    public void printPersonsOlderThan(List<Person> roster, int age) {
+    public void printPersonsWithinAgeRange(List<Person> roster, int low, int high) {
         for (Person p : roster) {
-            if (p.getAge() >= age) {
+            if (low <= p.getAge() && p.getAge() < high) {
                 p.printPerson();
             }
         }
