@@ -63,13 +63,9 @@ public class PersonServiceTest {
         // when
         personService.printPersons(
                 roster,
-                new CheckPerson() {
-                    public boolean test(Person p) {
-                        return p.getGender() == Person.Sex.MALE
-                                && p.getAge() >= 18
-                                && p.getAge() <= 25;
-                    }
-                }
+                (Person p) -> p.getGender() == Person.Sex.MALE
+                        && p.getAge() >= 18
+                        && p.getAge() <= 25
         );
 
         // then
