@@ -12,8 +12,6 @@ import static org.mockito.Mockito.*;
 
 public class ProcessorServiceTest {
 
-    private ProcessorService processorService;
-
     private Person fred;
     private Person jane;
     private Person george;
@@ -21,7 +19,6 @@ public class ProcessorServiceTest {
 
     @Before
     public void init() {
-        this.processorService = new ProcessorService();
         final Integer currentYear = IsoChronology.INSTANCE.dateNow().getYear();
 
         fred = new Person(
@@ -61,14 +58,14 @@ public class ProcessorServiceTest {
                 .build();
 
         // when
-        processorService.processElements(
-                roster,
-                p -> p.getGender() == Person.Sex.MALE
-                        && p.getAge() >= 18
-                        && p.getAge() <= 25,
-                p -> p.getEmailAddress(),
-                email -> System.out.println(email)
-        );
+        roster
+                .stream()
+                .filter(
+                        p -> p.getGender() == Person.Sex.MALE
+                                && p.getAge() >= 18
+                                && p.getAge() <= 25)
+                .map(p -> p.getEmailAddress())
+                .forEach(email -> System.out.println(email));
 
         // then
         verify(spyFred, times(1)).getEmailAddress();
