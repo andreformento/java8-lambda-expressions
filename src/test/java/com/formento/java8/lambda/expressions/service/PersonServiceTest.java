@@ -61,19 +61,22 @@ public class PersonServiceTest {
                 .build();
 
         // when
-        personService.printPersonsWithPredicate(
+        personService.processPersonsWithFunction(
                 roster,
                 p -> p.getGender() == Person.Sex.MALE
                         && p.getAge() >= 18
-                        && p.getAge() <= 25
+                        && p.getAge() <= 25,
+                p -> p.getEmailAddress(),
+                email -> System.out.println(email)
         );
 
-        // then
-        verify(spyFred, times(1)).printPerson();
 
-        verify(spyJane, never()).printPerson();
-        verify(spyGeorge, never()).printPerson();
-        verify(spyBob, never()).printPerson();
+        // then
+        verify(spyFred, times(1)).getEmailAddress();
+
+        verify(spyJane, never()).getEmailAddress();
+        verify(spyGeorge, never()).getEmailAddress();
+        verify(spyBob, never()).getEmailAddress();
     }
 
 }
