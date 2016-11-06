@@ -61,9 +61,9 @@ public class PersonServiceTest {
                 .build();
 
         // when
-        personService.printPersons(
+        personService.printPersonsWithPredicate(
                 roster,
-                (Person p) -> p.getGender() == Person.Sex.MALE
+                p -> p.getGender() == Person.Sex.MALE
                         && p.getAge() >= 18
                         && p.getAge() <= 25
         );
