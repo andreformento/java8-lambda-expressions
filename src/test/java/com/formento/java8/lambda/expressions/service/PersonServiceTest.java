@@ -26,12 +26,12 @@ public class PersonServiceTest {
 
         fred = new Person(
                 "Fred",
-                IsoChronology.INSTANCE.date(currentYear - 30, 6, 20),
+                IsoChronology.INSTANCE.date(currentYear - 24, 6, 20),
                 Person.Sex.MALE,
                 "fred@example.com");
         jane = new Person(
                 "Jane",
-                IsoChronology.INSTANCE.date(currentYear - 25, 7, 15),
+                IsoChronology.INSTANCE.date(currentYear - 26, 7, 15),
                 Person.Sex.FEMALE, "jane@example.com");
 
         george = new Person(
@@ -47,8 +47,6 @@ public class PersonServiceTest {
     @Test
     public void shouldShowPersonsOlderThan() {
         // given
-        final CheckPersonEligibleForSelectiveService check = new CheckPersonEligibleForSelectiveService();
-
         final Person spyFred = spy(fred);
         final Person spyJane = spy(jane);
         final Person spyGeorge = spy(george);
@@ -63,12 +61,21 @@ public class PersonServiceTest {
                 .build();
 
         // when
-        personService.printPersons(roster, check);
+        personService.printPersons(
+                roster,
+                new CheckPerson() {
+                    public boolean test(Person p) {
+                        return p.getGender() == Person.Sex.MALE
+                                && p.getAge() >= 18
+                                && p.getAge() <= 25;
+                    }
+                }
+        );
 
         // then
         verify(spyFred, times(1)).printPerson();
-        verify(spyJane, times(1)).printPerson();
 
+        verify(spyJane, never()).printPerson();
         verify(spyGeorge, never()).printPerson();
         verify(spyBob, never()).printPerson();
     }

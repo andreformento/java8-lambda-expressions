@@ -1,43 +1,22 @@
 # Java 8: Lambda expressions
 
-Based on [The Java™ Tutorials: Lambda Expressions](https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html#approach3)
+Based on [The Java™ Tutorials: Lambda Expressions](https://docs.oracle.com/javase/tutorial/java/javaOO/lambdaexpressions.html#approach4)
 
-#### Approach 3: Specify Search Criteria Code in a Local Class
+#### Approach 4: Specify Search Criteria Code in an Anonymous Class
 
-The following method prints members that match search criteria that you specify:
+One of the arguments of the following invocation of the method printPersons is an anonymous class that filters members that are eligible for Selective Service in the United States: those who are male and between the ages of 18 and 25:
 
 ```
-public void printPersons(List<Person> roster, CheckPerson tester) {
-    for (Person p : roster) {
-        if (tester.test(p)) {
-            p.printPerson();
+printPersons(
+    roster,
+    new CheckPerson() {
+        public boolean test(Person p) {
+            return p.getGender() == Person.Sex.MALE
+                && p.getAge() >= 18
+                && p.getAge() <= 25;
         }
     }
-}
+)
 ```
 
-This method checks each Person instance contained in the List parameter roster whether it satisfies the search criteria specified in the CheckPerson parameter tester by invoking the method tester.test. If the method tester.test returns a true value, then the method printPersons is invoked on the Person instance.
-
-To specify the search criteria, you implement the CheckPerson interface:
-
-```
-public interface CheckPerson {
-    boolean test(Person p);
-}
-```
-The following class implements the CheckPerson interface by specifying an implementation for the method test. This method filters members that are eligible for Selective Service in the United States: it returns a true value if its Person parameter is male and between the ages of 18 and 25:
-
-```
-public class CheckPersonEligibleForSelectiveService implements CheckPerson {
-    public boolean test(Person p) {
-        return Person.Sex.MALE.equals(p.getGender()) &&
-                p.getAge() >= 18 && p.getAge() <= 25;
-    }
-}
-```
-To use this class, you create a new instance of it and invoke the printPersons method:
-
-```
-printPersons(roster, new CheckPersonEligibleForSelectiveService());
-```
-Although this approach is less brittle—you don't have to rewrite methods if you change the structure of the Person—you still have additional code: a new interface and a local class for each search you plan to perform in your application. Because CheckPersonEligibleForSelectiveService implements an interface, you can use an anonymous class instead of a local class and bypass the need to declare a new class for each search.
+This approach reduces the amount of code required because you don't have to create a new class for each search that you want to perform. However, the syntax of anonymous classes is bulky considering that the CheckPerson interface contains only one method. In this case, you can use a lambda expression instead of an anonymous class, as described in the next section.
