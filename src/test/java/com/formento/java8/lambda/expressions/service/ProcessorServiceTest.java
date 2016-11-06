@@ -10,9 +10,9 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-public class PersonServiceTest {
+public class ProcessorServiceTest {
 
-    private PersonService personService;
+    private ProcessorService processorService;
 
     private Person fred;
     private Person jane;
@@ -21,7 +21,7 @@ public class PersonServiceTest {
 
     @Before
     public void init() {
-        this.personService = new PersonService();
+        this.processorService = new ProcessorService();
         final Integer currentYear = IsoChronology.INSTANCE.dateNow().getYear();
 
         fred = new Person(
@@ -61,7 +61,7 @@ public class PersonServiceTest {
                 .build();
 
         // when
-        personService.processPersonsWithFunction(
+        processorService.processElements(
                 roster,
                 p -> p.getGender() == Person.Sex.MALE
                         && p.getAge() >= 18
@@ -69,7 +69,6 @@ public class PersonServiceTest {
                 p -> p.getEmailAddress(),
                 email -> System.out.println(email)
         );
-
 
         // then
         verify(spyFred, times(1)).getEmailAddress();
