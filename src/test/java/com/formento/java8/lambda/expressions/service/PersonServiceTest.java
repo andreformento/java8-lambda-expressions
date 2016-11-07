@@ -7,12 +7,14 @@ import org.junit.Test;
 
 import java.time.chrono.IsoChronology;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
 public class PersonServiceTest {
 
     private PersonService personService;
+    private EmailSender emailSender;
 
     private Person fred;
     private Person jane;
@@ -21,27 +23,28 @@ public class PersonServiceTest {
 
     @Before
     public void init() {
-        this.personService = new PersonService();
+        this.emailSender = spy(new EmailSender());
+        this.personService = new PersonService(emailSender);
         final Integer currentYear = IsoChronology.INSTANCE.dateNow().getYear();
 
         fred = new Person(
                 "Fred",
                 IsoChronology.INSTANCE.date(currentYear - 30, 6, 20),
                 Person.Sex.MALE,
-                "fred@example.com");
+                Optional.of("fred@example.com"));
         jane = new Person(
                 "Jane",
                 IsoChronology.INSTANCE.date(currentYear - 25, 7, 15),
-                Person.Sex.FEMALE, "jane@example.com");
+                Person.Sex.FEMALE, Optional.of("jane@example.com"));
 
         george = new Person(
                 "George",
                 IsoChronology.INSTANCE.date(currentYear - 17, 8, 13),
-                Person.Sex.MALE, "george@example.com");
+                Person.Sex.MALE, Optional.of("george@example.com"));
         bob = new Person(
                 "Bob",
                 IsoChronology.INSTANCE.date(currentYear - 13, 9, 12),
-                Person.Sex.MALE, "bob@example.com");
+                Person.Sex.MALE, Optional.empty());
     }
 
     @Test
@@ -73,4 +76,21 @@ public class PersonServiceTest {
         verify(spyBob, never()).printPerson();
     }
 
+    @Test
+    public void shouldLikeProfileWithEmail() {
+        // when
+        personService.likeProfile(george);
+
+        // then
+        verify(emailSender, times(1)).sendEmail(any(), any());
+    }
+
+    @Test
+    public void shouldLikeProfileWithoutEmail() {
+        // when
+        personService.likeProfile(bob);
+
+        // then
+        verify(emailSender, never()).sendEmail(any(), any());
+    }
 }

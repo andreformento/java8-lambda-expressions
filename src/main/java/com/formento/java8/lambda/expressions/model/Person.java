@@ -2,6 +2,7 @@ package com.formento.java8.lambda.expressions.model;
 
 import java.time.LocalDate;
 import java.time.chrono.IsoChronology;
+import java.util.Optional;
 
 public class Person {
 
@@ -12,9 +13,9 @@ public class Person {
     private final String name;
     private final LocalDate birthday;
     private final Sex gender;
-    private final String emailAddress;
+    private final Optional<String> emailAddress;
 
-    public Person(final String name, final LocalDate birthday, final Sex gender, final String emailAddress) {
+    public Person(final String name, final LocalDate birthday, final Sex gender, final Optional<String> emailAddress) {
         this.name = name;
         this.birthday = birthday;
         this.gender = gender;
@@ -47,7 +48,7 @@ public class Person {
         return name;
     }
 
-    public String getEmailAddress() {
+    public Optional<String> getEmailAddress() {
         return emailAddress;
     }
 
