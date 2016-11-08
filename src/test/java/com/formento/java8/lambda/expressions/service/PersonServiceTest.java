@@ -67,7 +67,7 @@ public class PersonServiceTest {
 
         // then
         verify(spyFred, times(1)).printPerson();
-        verify(spyJane, times(1)).printPerson();
+        verify(spyJane, never()).printPerson(); // age ok, but gender not
 
         verify(spyGeorge, never()).printPerson();
         verify(spyBob, never()).printPerson();

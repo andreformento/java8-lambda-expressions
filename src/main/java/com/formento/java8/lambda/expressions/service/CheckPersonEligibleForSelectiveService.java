@@ -6,7 +6,7 @@ public class CheckPersonEligibleForSelectiveService implements CheckPerson {
 
     public boolean test(Person p) {
         return Person.Sex.MALE.equals(p.getGender()) &&
-                p.getAge() >= 18 && p.getAge() <= 25;
+                p.getAge() >= 19 && p.getAge() <= 35;
     }
 
 }
