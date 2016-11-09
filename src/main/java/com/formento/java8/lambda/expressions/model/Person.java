@@ -14,12 +14,18 @@ public class Person {
     private final LocalDate birthday;
     private final Sex gender;
     private final Optional<String> emailAddress;
+    private final Boolean isEnabled;
 
     public Person(final String name, final LocalDate birthday, final Sex gender, final Optional<String> emailAddress) {
+        this(name, birthday, gender, emailAddress, true);
+    }
+
+    public Person(final String name, final LocalDate birthday, final Sex gender, final Optional<String> emailAddress, Boolean isEnabled) {
         this.name = name;
         this.birthday = birthday;
         this.gender = gender;
         this.emailAddress = emailAddress;
+        this.isEnabled = isEnabled;
     }
 
     public Integer getAge() {
@@ -54,6 +60,10 @@ public class Person {
 
     public LocalDate getBirthday() {
         return birthday;
+    }
+
+    public Boolean isEnabled() {
+        return isEnabled;
     }
 
     @Override

@@ -1,6 +1,9 @@
 package com.formento.java8.lambda.expressions.service;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
 
@@ -9,10 +12,12 @@ import java.net.URISyntaxException;
 
 import static org.junit.Assert.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class ApiServiceTest {
     private static final String url = "http://www.mocky.io/v2/58210c6c120000ca006f4649";
 
-    private ApiService apiService = new ApiService();
+    @InjectMocks
+    private ApiService apiService;
 
     @Test
     public void shouldDoGet() throws URISyntaxException {

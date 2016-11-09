@@ -1,20 +1,40 @@
 package com.formento.java8.lambda.expressions.service;
 
 import com.formento.java8.lambda.expressions.model.Person;
+import com.formento.java8.lambda.expressions.repository.PersonRepoitory;
 import com.google.common.collect.ImmutableList;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.mockito.Answers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.chrono.IsoChronology;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class PersonServiceTest {
 
+    @InjectMocks
     private PersonService personService;
+
+    @Spy
     private EmailSender emailSender;
+
+    @Mock(answer = Answers.CALLS_REAL_METHODS)
+    private PersonRepoitory personRepoitory;
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     private Person fred;
     private Person jane;
@@ -23,8 +43,6 @@ public class PersonServiceTest {
 
     @Before
     public void init() {
-        this.emailSender = spy(new EmailSender());
-        this.personService = new PersonService(emailSender);
         final Integer currentYear = IsoChronology.INSTANCE.dateNow().getYear();
 
         fred = new Person(
@@ -93,4 +111,43 @@ public class PersonServiceTest {
         // then
         verify(emailSender, never()).sendEmail(any(), any());
     }
+
+    @Test
+    public void shouldGetByIdWhenExists() {
+        // given
+        final Integer id = 1;
+
+        // when
+        final Person person = personService.getById(id);
+
+        // then
+        assertNotNull(person);
+    }
+
+    @Test
+    public void shouldNotGetByIdWhenPersonIsNotEnabled() {
+        // given
+        final Integer id = 2;
+
+        // expected exception
+        expectedException.expect(DataNotFoundException.class);
+        expectedException.expectMessage("Id 2 not found");
+
+        // when
+        personService.getById(id);
+    }
+
+    @Test
+    public void shouldNotGetByIdWhenNotExists() {
+        // given
+        final Integer id = 987;
+
+        // expected exception
+        expectedException.expect(DataNotFoundException.class);
+        expectedException.expectMessage("Id 987 not found");
+
+        // when
+        personService.getById(id);
+    }
+
 }
