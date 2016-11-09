@@ -64,8 +64,8 @@ public class ProcessorServiceTest {
                         p -> p.getGender() == Person.Sex.MALE
                                 && p.getAge() >= 18
                                 && p.getAge() <= 25)
-                .map(p -> p.getEmailAddress())
-                .forEach(email -> System.out.println(email));
+                .map(Person::getEmailAddress)
+                .forEach(System.out::println);
 
         // then
         verify(spyFred, times(1)).getEmailAddress();
